@@ -1,18 +1,44 @@
 set nocompatible
 
+" plugins下のディレクトリをruntimepathへ追加する。
+for s:path in split(glob($VIM.'/plugins/*'), '\n')
+  if s:path !~# '\~$' && isdirectory(s:path)
+    let &runtimepath = &runtimepath.','.s:path
+  end
+endfor
+unlet s:path
+
+
+"Windowsのときはメニュー文字化けが鬱陶しいので英語にする
+if has("win32") && has("multi_lang")
+  source $VIMRUNTIME/delmenu.vim 
+  set langmenu=none
+  set guioptions-=T
+  source $VIMRUNTIME/menu.vim
+  set guifont=Consolas:h12,Lucida_Console:h12w6 guifontwide=MS_Gothic:h12
+  language C
+endif
+" MacOS Xメニューの日本語化 (メニュー表示前に行なう必要がある)
+if has('mac')
+  set langmenu=japanese
+endif
+
+
+
 " Vim Plugin
 if has('vim_starting')
-    set runtimepath+=~/.vim/bundle/neobundle.vim
-    call neobundle#rc(expand('~/.vim/bundle/'))
+  set runtimepath+=~/.vim/bundle/neobundle.vim
+  call neobundle#rc(expand('~/.vim/bundle/'))
 endif
 
 " Neobundle settings
 NeoBundle 'Shougo/neobundle.vim'
 NeoBundle 'Shougo/vimproc'
 NeoBundle 'Shougo/neocomplete.vim'
+NeoBundle 'altercation/vim-colors-solarized'
 "NeoBundle 'Shougo/neosnippet'
-NeoBundle 'myhere/vim-nodejs-complete'
-NeoBundle 'moll/vim-node';
+"NeoBundle 'myhere/vim-nodejs-complete'
+"NeBundle 'moll/vim-node'
 
 " neocomplete
 let g:neocomplete_enable_at_startup = 1
@@ -34,6 +60,8 @@ set confirm
 set autoread
 set nobackup
 set noswapfile
+
+
 
 " search settings
 set ignorecase	" mutch uppwe and lower
