@@ -1,0 +1,220 @@
+[[plugins]]
+repo = 'scrooloose/syntastic.git'
+hook_add = '''
+let g:syntastic_enable_signs=1
+let g:syntastic_enable_highlighting=1
+let g:syntastic_always_populate_loc_list = 0
+let g:syntastic_auto_loc_list=2
+let g:syntastic_check_on_open = 1
+let g:syntastic_javascript_checkers=['eslint']
+'''
+
+[[plugins]]
+repo = 'scrooloose/nerdtree'
+depends = ['vim-nerdtree-tabs']
+
+[[plugins]]
+repo = 'jistr/vim-nerdtree-tabs'
+hook_add = '''
+let g:nerdtree_tabs_open_on_console_startup=1
+" unfocus nerdtree when startup vim
+augroup unfocusNerdTree
+  autocmd!
+  autocmd VimEnter * if !argc() | NERDTree | endif
+augroup END
+noremap <Leader>n :NERDTreeTabsToggle<CR>
+'''
+
+[[plugins]]
+repo = 'aereal/vim-colors-japanesque'
+[[plugins]]
+repo = 'tomasr/molokai'
+hook_add = '''
+au colorSet VimEnter * nested colorscheme molokai
+'''
+
+[[plugins]]
+repo = 'cespare/vim-toml'
+
+[[plugins]]
+repo = 'Townk/vim-autoclose'
+
+[[plugins]]
+repo = 'osyo-manga/vim-precious'
+depends = ['context_filetype.vim']
+
+[[plugins]]
+repo = 'Shougo/context_filetype.vim'
+
+[[plugins]]
+repo = 'alvan/vim-closetag'
+
+[[plugins]]
+repo = 'osyo-manga/unite-quickfix'
+
+[[plugins]]
+repo = 'vim-scripts/DirDiff.vim'
+
+[[plugins]]
+repo = 'vim-scripts/taglist.vim'
+hook_add = '''
+let Tlist_Ctags_Cmd='/usr/local/bin/ctags/'
+let tlist_php_settings='php;c:class;d:constant;f:function'
+let tlist_javascript_settings = 'javascript;c:class;m:method;f:function;p:property'
+let Tlist_Use_Right_Window=1
+let Tlist_Enable_Fold_Column=1
+let Tlist_Show_One_File=1
+let Tlist_Auto_Open=1
+let Tlist_Auto_Update=1
+let Tlist_Compact_Format=1
+let Tlist_Exit_OnlyWindow=1
+noremap <Leader>t :TlistToggle<CR>
+" Source-Explorer
+let g:SrcExpl_updateTagsCmd = '/usr/local/bin/ctags --sort=foldcase -R .'
+'''
+
+[[plugins]]
+repo = 'wesleyche/SrcExpl'
+
+
+[[plugins]]
+repo = 'itchyny/lightline.vim'
+hook_add = '''
+let g:lightline = {
+      \ 'colorscheme': 'default',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],[ 'fugitive' ], ['bufnum', 'modified'], [ 'filename' ] ],
+      \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], ['currentdir', 'fileformat', 'fileencoding', 'filetype' ] ]
+      \ },
+      \ 'component_function': {
+      \   'filename': 'MyFilename',
+      \   'fileformat': 'MyFileformat',
+      \   'filetype': 'MyFiletype',
+      \   'fileencoding': 'MyFileencoding',
+      \   'mode': 'MyMode',
+      \   'percent' : 'MyPercent',
+      \   'modified': 'MyModified',
+      \   'lineinfo' : 'MyLineInfo',
+      \   'fugitive' : 'MyFugitive'
+      \ },
+      \ 'component_expand': {
+      \   'syntastic': 'SyntasticStatuslineFlag',
+      \ },
+      \ 'component_type': {
+      \   'syntastic': 'error',
+      \ },
+      \ 'subseparator': { 'left': '', 'right': '' }
+      \ }
+
+let g:lightline.inactive = {
+      \ 'left': [ [ 'mode' ], ['bufname'], ['filename'] ],
+      \ 'right': [ [ 'fileformat', 'fileencoding', 'filetype' ], ['currentdir'] ] }
+
+function! MyModified()
+  if winwidth(0) < 70
+    return ''
+  endif
+  return &ft =~ 'help' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+endfunction
+
+function! MyReadonly()
+  return &ft !~? 'help' && &readonly ? 'ReadOnly' : ''
+endfunction
+
+function! MyFilename()
+  let fname = expand('%')
+  return fname =~ 'NERD_tree' ? 'NerdTree' :
+        \ fname =~ 'Tag_List' ? 'TagList' :
+        \ &ft == 'unite' ? unite#get_status_string() :
+        \ &ft == 'NERD_tree' ? 'NERDTree' :
+        \ ('' != MyReadonly() ? MyReadonly() . ' ' : '') .
+        \ ('' != fname ? fname : '[No Name]')
+endfunction
+function! MyCurrentDir()
+  return winwidth(0) > 70 ? '('.getcwd().')' : ''
+endfunction
+function! MyFileformat()
+  return winwidth(0) > 70 ? &fileformat : ''
+endfunction
+
+function! MyFiletype()
+  return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype : "No FileType") : ''
+endfunction
+
+function! MyFileencoding()
+  return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
+endfunction
+
+function! MyPercent()
+  return winwidth(0) > 70 ? printf('%3d%%', 100 * line('.') / line('$')) : ''
+endfunction
+
+function! MyLineInfo()
+  return winwidth(0) > 70 ? printf('%d:%d', line("."), col(".")) : ''
+endfunction
+function! MyMode()
+  let fname = expand('%:t')
+  return &ft == 'denite' ? 'Denite' :
+        \ &ft == 'vimshell' ? 'VimShell' :
+        \ winwidth(0) > 60 ? lightline#mode() : ''
+endfunction
+
+function! MyFugitive()
+  return exists('*fugitive#head') ? fugitive#head() : ''
+endfunction
+
+let g:tagbar_status_func = 'TagbarStatusFunc'
+
+function! TagbarStatusFunc(current, sort, fname, ...) abort
+    let g:lightline.fname = a:fname
+  return lightline#statusline(0)
+endfunction
+
+augroup AutoSyntastic
+  autocmd!
+  autocmd BufWritePost *.c,*.cpp call s:syntastic()
+augroup END
+function! s:syntastic()
+  SyntasticCheck
+  call lightline#update()
+endfunction
+
+let g:denite_force_overwrite_statusline = 0
+let g:vimfiler_force_overwrite_statusline = 0
+let g:vimshell_force_overwrite_statusline = 0
+
+command! -bar LightlineUpdate    call lightline#init()|
+  \ call lightline#colorscheme()|
+  \ call lightline#update()
+'''
+
+[[plugins]]
+repo = 'junegunn/vim-easy-align'
+hook_add = '''
+vmap <Enter> <Plug>(EasyAlign)
+'''
+
+[[plugins]]
+repo = 'airblade/vim-gitgutter'
+hook_add = '''
+let g:gitgutter_enabled = 1
+'''
+
+[[plugins]]
+repo = 'Shougo/deoplete.nvim'
+depends = 'context_filetype.vim'
+if = "has('nvim')"
+on_i = 1
+hook_source = '''
+let g:deoplete#enable_at_startup = 1
+"source ~/.vim/rc/plugins/deoplete.rc.vim
+inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS>  deoplete#smart_close_popup()."\<C-h>"
+'''
+
+[[plugins]]
+repo = 'tpope/vim-fugitive'
+
+
+[[plugins]]
+repo = 'osyo-manga/vim-brightest'
