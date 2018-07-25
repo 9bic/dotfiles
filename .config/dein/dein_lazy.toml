@@ -5,7 +5,7 @@ repo = 'Shougo/neomru.vim'
 repo = 'Shougo/denite.nvim'
 depends = ['neomru.vim']
 on_cmd='Denite'
-hook_source='source ~/.config/nvim/denite.vim'
+hook_source='source ~/.config/vim/denite.vim'
 hook_add='''
 let g:denite_split_rule="bot"
 let g:denite_winheight=15
@@ -73,6 +73,10 @@ repo = 'pbogut/deoplete-padawan'
 on_ft = 'php'
 
 [[plugins]]
+repo = 'jwalton512/vim-blade'
+on_ft = 'blade.php'
+
+[[plugins]]
 repo = 'othree/yajs.vim'
 on_ft = 'javascript'
 
@@ -86,8 +90,17 @@ if executable('typescript-language-server')
   let g:LanguageClient_serverCommands.typescript = ['typescript-language-server', '--stdio']
   autocmd FileType typescript setlocal omnifunc=LanguageClient#complete
 endif
+let g:typescript_compiler_binary = 'tsc'
 '''
 
 [[plugins]]
 repo = 'posva/vim-vue'
 on_ft = 'vue'
+
+[[plugins]]
+repo = 'mrk21/yaml-vim'
+on_ft = 'yaml'
+
+[[plugins]]
+repo = 'davidhalter/jedi-vim'
+on_ft = 'python'

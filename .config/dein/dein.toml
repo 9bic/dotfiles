@@ -26,6 +26,9 @@ noremap <Leader>n :NERDTreeTabsToggle<CR>
 '''
 
 [[plugins]]
+repo = 'Xuyuanp/nerdtree-git-plugin'
+
+[[plugins]]
 repo = 'aereal/vim-colors-japanesque'
 [[plugins]]
 repo = 'tomasr/molokai'

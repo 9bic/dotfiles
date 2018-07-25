@@ -49,6 +49,10 @@ if has('mac') || has('unix')
   endif
 endif
 
+if has('gui')
+  source $RC_DIR/gui.vim
+endif
+
 " edit settings
 filetype off
 filetype plugin indent off
@@ -148,13 +152,14 @@ augroup vimrc_filetype
     autocmd FileType xml        setlocal sw=2 ts=2
     autocmd FileType html       setlocal sw=2 ts=2
     autocmd FileType vim        setlocal sw=2 ts=2
-    autocmd FileType text       setlocal sw=4 ts=4 noexpandtab
+    autocmd FileType text       setlocal sw=4 ts=4
     autocmd FileType sh         setlocal sw=2 ts=2
-    autocmd FileType css        setlocal sw=4 ts=4 noexpandtab
-    autocmd FileType php        setlocal sw=4 ts=4 noexpandtab
-    autocmd FileType python     setlocal sw=4 ts=4 noexpandtab
+    autocmd FileType css        setlocal sw=4 ts=4
+    autocmd FileType php        setlocal sw=4 ts=4
+    autocmd FileType python     setlocal sw=4 ts=4
     autocmd FileType json       setlocal sw=2 ts=2
     autocmd FileType swift      setlocal sw=4 ts=4
+    autocmd FileType yaml       setlocal sw=2 ts=2 sts=2 expandtab indentkeys-=<:>
 augroup END
 
 " highlight FULL-PITCH space
