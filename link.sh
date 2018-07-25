@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 dotfiles=(.vimrc .gvimrc .vimrc.lightline .vimrc.neocomplete .vimrc.unite .bashrc .bash_profile com.googlecode.iterm2.plist .zshenv .zshrc )
 
