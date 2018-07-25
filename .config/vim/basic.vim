@@ -7,26 +7,26 @@ if has("win32") || has("win64")
   source $VIMRUNTIME/menu.vim
 endif
 
-if has('unix')
-  let s:userdir = expand('~/.vim')
-  let s:install_plugin = 0
-  set ttimeout
-  set ttimeoutlen=10
-  " status line (without lightline)
-  set showcmd
-  set statusline=[%n]
-  set statusline+=[%{matchstr(hostname(),'\\w\\+')}@]
-  set statusline+=[%<%F]
-  set statusline+=%m
-  set statusline+=%r
-  set statusline+=%L
-  set statusline+=%=
-  set statusline+=%y
-  set statusline+=[%{has('multi_byte')&&\&fileencoding!=''?&fileencoding:&encoding}]
-  set statusline+=[line:%l/%L(%p%%),col:%c]
-endif
+" if has('unix')
+"   let s:userdir = expand('~/.vim')
+"   let s:install_plugin = 0
+"   set ttimeout
+"   set ttimeoutlen=10
+"   " status line (without lightline)
+"   set showcmd
+"   set statusline=[%n]
+"   set statusline+=[%{matchstr(hostname(),'\\w\\+')}@]
+"   set statusline+=[%<%F]
+"   set statusline+=%m
+"   set statusline+=%r
+"   set statusline+=%L
+"   set statusline+=%=
+"   set statusline+=%y
+"   set statusline+=[%{has('multi_byte')&&\&fileencoding!=''?&fileencoding:&encoding}]
+"   set statusline+=[line:%l/%L(%p%%),col:%c]
+" endif
 
-if has('mac')
+if has('mac') || has('unix')
   let s:userdir = expand('~/.vim')
   let s:install_plugin = 1
   set imdisable
@@ -177,6 +177,6 @@ if has('nvim')
   tnoremap <C-w> <C-\><C-n><C-w>
 endif
 
-" autoclose with deoplete workaround
-let g:AutoClosePumvisible = {"ENTER": "<C-Y>", "ESC": "<ESC>"}
+let g:deoplete#enable_at_startup = 1
+
 

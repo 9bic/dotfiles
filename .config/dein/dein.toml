@@ -201,16 +201,27 @@ let g:gitgutter_enabled = 1
 '''
 
 [[plugins]]
+repo = 'roxma/vim-hug-neovim-rpc'
+
+[[plugins]]
+repo = 'roxma/nvim-yarp'
+
+[[plugins]]
 repo = 'Shougo/deoplete.nvim'
-depends = 'context_filetype.vim'
-if = "has('nvim')"
+depends = ['context_filetype.vim', 'vim-hug-neovim-rpc', 'nvim-yarp']
 on_i = 1
 hook_source = '''
-let g:deoplete#enable_at_startup = 1
 "source ~/.vim/rc/plugins/deoplete.rc.vim
 inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
 inoremap <expr><BS>  deoplete#smart_close_popup()."\<C-h>"
+
+" autoclose with deoplete workaround
+let g:AutoClosePumvisible = {"ENTER": "<C-Y>", "ESC": "<ESC>"}
 '''
+
+[[plugins]]
+repo = 'fszymanski/deoplete-emoji'
+
 
 [[plugins]]
 repo = 'tpope/vim-fugitive'
@@ -218,3 +229,15 @@ repo = 'tpope/vim-fugitive'
 
 [[plugins]]
 repo = 'osyo-manga/vim-brightest'
+
+
+[[plugins]]
+repo = 'prabirshrestha/async.vim'
+
+[[plugins]]
+repo = 'autozimu/LanguageClient-neovim'
+rev = 'next'
+build = 'bash install.sh'
+hook_source = '''
+let g:LanguageClient_autoStart = 1
+'''

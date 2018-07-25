@@ -26,7 +26,7 @@ nnoremap <Space>fi :<C-u>Denite file_rec -no-quit -mode=normal<CR>
 nnoremap <Space>cd :<C-u>Denite file -no-quit<CR>
 nnoremap <Space>q <C-u>Denite quickfix -no-quit -mode=normal<CR>
 nnoremap <Space>l <C-u>Denite line -no-quit<CR>
-nnoremap <Space>: <C-u>Denite command<CR>
+nnoremap <Space>cm <C-u>Denite command<CR>
 nnoremap <Space>o <C-u>Denite outline -profile-name=outline -mode=normal -no-quit<CR>
 '''
 
@@ -78,7 +78,15 @@ on_ft = 'javascript'
 
 [[plugins]]
 repo = 'leafgarland/typescript-vim.git'
-on_ft = 'javascript'
+on_ft = 'typescript'
+depends = ['LanguageClient-neovim']
+hook_add = '''
+let g:LanguageClient_serverCommands = {}
+if executable('typescript-language-server')
+  let g:LanguageClient_serverCommands.typescript = ['typescript-language-server', '--stdio']
+  autocmd FileType typescript setlocal omnifunc=LanguageClient#complete
+endif
+'''
 
 [[plugins]]
 repo = 'posva/vim-vue'
