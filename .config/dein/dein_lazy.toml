@@ -47,22 +47,36 @@ repo = 'landaire/deoplete-swift'
 on_ft = 'swift'
 hook_add = '''
 let g:quickrun_config = {}
-let g:quickrun_config['swift'] = {
-\ 'command': 'xcrun',
-\ 'cmdopt': 'swift',
-\ 'exec': '%c %o %s',
-\}
+if has('mac')
+  let g:quickrun_config['swift'] = {
+        \ 'command': 'xcrun',
+        \ 'cmdopt': 'swift',
+        \ 'exec': '%c %o %s',
+        \}
+endif
+
+if has('unix') && executable('sourcekitten')
+  let g:quickrun_config['swift'] = {
+        \ 'command': 'swift',
+        \ 'cmdopt': 'build',
+        \ 'exec': '%c %o',
+        \}
+endif
+
 let g:deoplete#sources#swift#daemon_autostart = 1
 '''
+
+#[[plugins]]
+#repo = 'mitsuse/autocomplete-swift'
+#on_ft = 'swift'
+#hook_add = '''
+#autocmd BufNewFile,BufRead *.swift set filetype=swift
+#'''
 
 [[plugins]]
 repo  = 'othree/html5.vim'
 on_ft = 'html'
 
-[[plugins]]
-repo = 'kballard/vim-swift'
-on_ft = 'swift'
-depends = ['syntastic']
 
 [[plugins]]
 repo = 'keith/swift.vim'
