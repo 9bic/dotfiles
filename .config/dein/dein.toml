@@ -1,12 +1,37 @@
+#[[plugins]]
+#repo = 'scrooloose/syntastic.git'
+#on_if = "!has('job') || !has('channel') || !has('timers')"
+#hook_add = '''
+#let g:syntastic_enable_signs=1
+#let g:syntastic_enable_highlighting=1
+#let g:syntastic_always_populate_loc_list = 0
+#let g:syntastic_auto_loc_list=2
+#let g:syntastic_check_on_open = 1
+#let g:syntastic_javascript_checkers=['eslint']
+#'''
+
 [[plugins]]
-repo = 'scrooloose/syntastic.git'
+repo = 'w0rp/ale'
+on_if = "has('job') && has('channel') && has('timers')"
 hook_add = '''
-let g:syntastic_enable_signs=1
-let g:syntastic_enable_highlighting=1
-let g:syntastic_always_populate_loc_list = 0
-let g:syntastic_auto_loc_list=2
-let g:syntastic_check_on_open = 1
-let g:syntastic_javascript_checkers=['eslint']
+let g:ale_linters = {
+\   'php':        ['phpstan'],
+\   'python':     ['pylint'],
+\   'c':          ['clang'],
+\   'cpp':        ['clang'],
+\   'go':         ['golint'],
+\   'java':       ['javac'],
+\   'javascript': ['eslint'],
+\   'typescript': ['eslint'],
+\   'swift':      ['swiftpm', 'swiftlint'],
+\   'css':        ['stylelint']
+\}
+let g:ale_linters_explicit = 1
+let g:ale_sign_error = '>>'
+let g:ale_sign_warning = '--'
+let g:ale_statusline_format = ['E%d', 'W%d', 'ok']
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 1
 '''
 
 [[plugins]]
@@ -80,6 +105,7 @@ let g:SrcExpl_updateTagsCmd = '/usr/local/bin/ctags --sort=foldcase -R .'
 repo = 'wesleyche/SrcExpl'
 
 
+
 [[plugins]]
 repo = 'itchyny/lightline.vim'
 hook_add = '''
@@ -87,7 +113,7 @@ let g:lightline = {
       \ 'colorscheme': 'default',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],[ 'fugitive' ], ['bufnum', 'modified'], [ 'filename' ] ],
-      \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], ['currentdir', 'fileformat', 'fileencoding', 'filetype' ] ]
+      \   'right': [ ['linter_warnings', 'linter_errors', 'lineinfo' ], ['percent'], ['currentdir', 'fileformat', 'fileencoding', 'filetype' ] ]
       \ },
       \ 'component_function': {
       \   'filename': 'MyFilename',
@@ -98,7 +124,7 @@ let g:lightline = {
       \   'percent' : 'MyPercent',
       \   'modified': 'MyModified',
       \   'lineinfo' : 'MyLineInfo',
-      \   'fugitive' : 'MyFugitive'
+      \   'fugitive' : 'MyFugitive',
       \ },
       \ 'component_expand': {
       \   'syntastic': 'SyntasticStatuslineFlag',
@@ -183,12 +209,28 @@ function! s:syntastic()
 endfunction
 
 let g:denite_force_overwrite_statusline = 0
-let g:vimfiler_force_overwrite_statusline = 0
-let g:vimshell_force_overwrite_statusline = 0
 
 command! -bar LightlineUpdate    call lightline#init()|
   \ call lightline#colorscheme()|
   \ call lightline#update()
+'''
+
+[[plugins]]
+repo = 'maximbaz/lightline-ale'
+depends = ['lightline.vim', 'ale']
+hook_add = '''
+let g:lightline.component_expand = {
+      \  'linter_checking': 'lightline#ale#checking',
+      \  'linter_warnings': 'lightline#ale#warnings',
+      \  'linter_errors': 'lightline#ale#errors',
+      \  'linter_ok': 'lightline#ale#ok',
+      \ }
+let g:lightline.component_type = {
+      \     'linter_checking': 'left',
+      \     'linter_warnings': 'warning',
+      \     'linter_errors': 'error',
+      \     'linter_ok': 'left',
+      \ }
 '''
 
 [[plugins]]
@@ -197,11 +239,11 @@ hook_add = '''
 vmap <Enter> <Plug>(EasyAlign)
 '''
 
-[[plugins]]
-repo = 'airblade/vim-gitgutter'
-hook_add = '''
-let g:gitgutter_enabled = 1
-'''
+#[[plugins]]
+#repo = 'airblade/vim-gitgutter'
+#hook_add = '''
+#let g:gitgutter_enabled = 1
+#'''
 
 [[plugins]]
 repo = 'roxma/vim-hug-neovim-rpc'
