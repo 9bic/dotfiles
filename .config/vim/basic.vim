@@ -63,7 +63,7 @@ set noerrorbells
 set mouse=a
 set whichwrap+=h,l,<,>,[,],b,s	" good for cursor key!
 set nowrap
-set termguicolors
+"set termguicolors
 
 augroup colorSet
   autocmd!
@@ -110,7 +110,6 @@ catch
   set listchars=tab:>/ ,extends:>>,eol:<
 endtry
 
-set t_Co=256
 set ambiwidth=double
 set lazyredraw
 set scrolloff=5
