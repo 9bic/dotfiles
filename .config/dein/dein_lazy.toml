@@ -118,3 +118,4 @@ on_ft = 'python'
 
 [[plugins]]
 repo = 'ekalinin/Dockerfile.vim'
+on_ft = 'Dockerfile'
