@@ -1,15 +1,3 @@
-#[[plugins]]
-#repo = 'scrooloose/syntastic.git'
-#on_if = "!has('job') || !has('channel') || !has('timers')"
-#hook_add = '''
-#let g:syntastic_enable_signs=1
-#let g:syntastic_enable_highlighting=1
-#let g:syntastic_always_populate_loc_list = 0
-#let g:syntastic_auto_loc_list=2
-#let g:syntastic_check_on_open = 1
-#let g:syntastic_javascript_checkers=['eslint']
-#'''
-
 [[plugins]]
 repo = 'w0rp/ale'
 on_if = "has('job') && has('channel') && has('timers')"
@@ -69,7 +57,7 @@ repo = 'Townk/vim-autoclose'
 
 [[plugins]]
 repo = 'osyo-manga/vim-precious'
-depends = ['context_filetype.vim']
+depend = ['context_filetype.vim']
 
 [[plugins]]
 repo = 'Shougo/context_filetype.vim'
@@ -199,14 +187,14 @@ function! TagbarStatusFunc(current, sort, fname, ...) abort
   return lightline#statusline(0)
 endfunction
 
-augroup AutoSyntastic
-  autocmd!
-  autocmd BufWritePost *.c,*.cpp call s:syntastic()
-augroup END
-function! s:syntastic()
-  SyntasticCheck
-  call lightline#update()
-endfunction
+"augroup AutoSyntastic
+"  autocmd!
+"  autocmd BufWritePost *.c,*.cpp call s:syntastic()
+"augroup END
+"function! s:syntastic()
+"  SyntasticCheck
+"  call lightline#update()
+"endfunction
 
 let g:denite_force_overwrite_statusline = 0
 
@@ -272,8 +260,8 @@ repo = 'fszymanski/deoplete-emoji'
 repo = 'tpope/vim-fugitive'
 
 
-[[plugins]]
-repo = 'osyo-manga/vim-brightest'
+#[[plugins]]
+#repo = 'osyo-manga/vim-brightest'
 
 
 [[plugins]]
