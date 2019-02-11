@@ -185,3 +185,5 @@ endif
 let g:deoplete#enable_at_startup = 1
 
 
+" lsp global commands
+let g:LanguageClient_serverCommands = {}
