@@ -1,0 +1,146 @@
+[[plugins]]
+repo = 'vim-denops/denops.vim'
+on_event = ['VimEnter']
+
+# guess filetype from cursor
+[[plugins]]
+repo = 'Shougo/context_filetype.vim'
+on_event = ['InsertEnter', 'CursorHold']
+
+# align code
+[[plugins]]
+repo = 'junegunn/vim-easy-align'
+on_event = ['InsertEnter', 'CursorHold']
+hook_source = '''
+vmap <C-=> <Plug>(EasyAlign)
+'''
+
+# close brace
+[[plugins]]
+repo = 'cohama/lexima.vim'
+on_event = ['InsertEnter', 'CursorHold']
+
+# paste image
+[[plugins]]
+repo = 'img-paste-devs/img-paste.vim'
+on_event = ['VimEnter']
+hook_source = '''
+augroup InitImgPaste
+  autocmd FileType markdown nmap <buffer><silent> <leader>p <CMD>call mdip#MarkdownClipboardImage()<CR>
+augroup END
+let g:mdip_imgdir = 'resources'
+'''
+
+
+# git
+[[plugins]]
+repo = 'tpope/vim-fugitive'
+on_event = ['VimEnter']
+hook_source = '''
+nnoremap <silent> <C-g><C-g> <Cmd>Git<CR>
+nnoremap <silent> <C-g>u <Cmd>Git restore --staged %<CR>
+nnoremap <silent> <C-g>ss <Cmd>Git stash<CR>
+nnoremap <silent> <C-g>sr <Cmd>Git stash pop<CR>
+'''
+
+[[plugins]]
+repo = 'airblade/vim-gitgutter'
+on_event = ['VimEnter']
+hook_source = '''
+let g:gitgutter_enabled = 1
+let g:gitgutter_preview_win_floating = 1
+nnoremap <silent> <C-g><CR> <Plug>(GitGutterStageHunk)
+nnoremap <silent> <C-g><C-p> <Plug>(GitGutterPreviousHunk)
+nnoremap <silent> <C-g><C-n> <Plug>(GitGutterNextHunk)
+nnoremap <silent> <C-g>p <Plug>(GitGutterPreviewHunk)
+'''
+
+# comment out
+[[plugins]]
+repo = 'tyru/caw.vim'
+on_event = ['VimEnter']
+hook_source = '''
+let g:caw_no_default_keymappings = 0
+nnoremap <C-_> <Plug>(caw:hatpos:toggle)
+vnoremap <C-_> <Plug>(caw:hatpos:toggle)
+onoremap <C-_> <Plug>(caw:hatpos:toggle)
+xnoremap <C-_> <Plug>(caw:hatpos:toggle)
+'''
+
+# replace overlay
+[[plugins]]
+repo = 'osyo-manga/vim-over'
+on_event = ['VimEnter']
+hook_source = '''
+nnoremap <silent> <Leader>/ <Cmd>OverCommandLine<CR>%s/
+'''
+
+
+# close html tag
+[[plugins]]
+repo = 'alvan/vim-closetag'
+on_ft = ['html', 'xhtml', 'jsx', 'tsx']
+hook_source = '''
+let g:closetag_xhtml_filenames = '*.xhtml,*.jsx,*.tsx'
+let g:closetag_xhtml_filetypes = 'xhtml,jsx,tsx'
+'''
+
+# parentheses completion
+[[plugins]]
+repo = 'tpope/vim-surround'
+on_event = ['InsertEnter', 'CursorHold']
+
+# lsp
+[[plugins]]
+repo = 'prabirshrestha/vim-lsp'
+on_event = ['VimEnter']
+hook_source = '''
+function! s:lsp_reset() abort
+  :LspStopServer<CR>
+  :e %<CR>
+endfunction
+
+function! s:on_lsp_buffer_enabled() abort
+  let g:lsp_document_code_action_signs_enabled = 0
+  let g:lsp_diagnostics_float_insert_mode_enabled = 0
+  let g:lsp_diagnostics_highlights_insert_mode_enabled = 0
+  let g:lsp_format_sync_timeout = 5000
+  let g:lsp_completion_resolve_timeout = 5000
+  let g:lsp_semantic_enabled = 1
+  if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+  inoremap <silent> <C-l>a <Cmd>LspCodeAction<CR>
+  inoremap <silent> <C-l>p <Cmd>LspPeekImplementation<CR>
+  inoremap <silent> <C-l>d <Cmd>LspDefinition<CR>
+  inoremap <silent> <C-l>r <Cmd>LspReferences<CR>
+  inoremap <silent> <C-l><CR> <Cmd>LspRename<CR>
+
+  nnoremap <silent> = <Cmd>LspDocumentFormat<CR>
+
+  nnoremap <silent> <C-l>a <Cmd>LspCodeAction<CR>
+  nnoremap <silent> <C-l>p <Cmd>LspPeekImplementation<CR>
+  nnoremap <silent> <C-l>d <Cmd>LspDefinition<CR>
+  nnoremap <silent> <C-l>r <Cmd>LspReferences<CR>
+  nnoremap <silent> <C-l><CR> <Cmd>LspRename<CR>
+  nnoremap <C-l><C-l><C-l> <Cmd>LspStopServer<CR>
+  
+  " scroll Popup
+  nnoremap <buffer> <expr><C-n> lsp#scroll(+4)
+  nnoremap <buffer> <expr><C-p> lsp#scroll(-4)
+
+  " Diagnostics
+  nnoremap <silent> <C-l>] <Cmd>LspNextDiagnostic<CR>
+  nnoremap <silent> <C-l>[ <Cmd>LspPreviousDiagnostic<CR>
+endfunction
+
+augroup InstallLsp
+  autocmd!
+  autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
+
+autocmd FileType markdown call lsp#disable_diagnostics_for_buffer()
+'''
+
+[[plugins]]
+repo = 'mattn/vim-lsp-settings'
+depends = ['vim-lsp']
+on_source = ['vim-lsp']

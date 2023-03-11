@@ -1,0 +1,77 @@
+# Dark completion
+[[plugins]]
+repo = 'Shougo/ddc-matcher_head'
+on_source = ['ddc.vim']
+
+[[plugins]]
+repo = 'Shougo/ddc-sorter_rank'
+on_source = ['ddc.vim']
+
+[[plugins]]
+repo = 'Shougo/ddc-around'
+on_source = ['ddc.vim']
+
+[[plugins]]
+repo = 'shun/ddc-vim-lsp'
+on_source = ['ddc.vim']
+
+[[plugins]]
+repo = 'LumaKernel/ddc-source-file'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'Shougo/neco-vim'
+on_source = ['ddc.vim']
+hook_source = '''
+call ddc#custom#patch_filetype(
+  \ ['vim'], 'sources', ['necovim', 'around', 'file']
+  \ )
+'''
+
+[[plugins]]
+repo = 'Shougo/ddc-source-cmdline'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'Shougo/pum.vim'
+hook_source = '''
+call pum#set_option(#{
+  \   auto_confirm_time: 1500,
+  \   use_complete: v:true,
+  \ })
+'''
+
+[[plugins]]
+repo = 'Shougo/ddc-ui-pum'
+on_source = ['pum.vim']
+
+[[plugins]]
+repo = 'Shougo/ddc-converter_remove_overlap'
+on_source = ['ddc.vim']
+
+[[plugins]]
+repo = 'Shougo/ddc.vim'
+depends = ['denops.vim', 'pum.vim', 'context_filetype.vim']
+on_event = ['InsertEnter', 'CursorHold']
+hook_source = '''
+call ddc#custom#patch_global('sources', [
+  \ 'vim-lsp',
+  \ 'around',
+  \ 'file'
+  \ ])
+call ddc#custom#patch_global('sourceOptions', {
+  \ '_': {
+  \   'matchers': ['matcher_head'],
+  \   'sorters': ['sorter_rank'],
+  \   'converters': ['converter_remove_overlap'],
+  \ },
+  \ 'around': {'mark': 'Around'},
+  \ 'vim-lsp': {
+  \   'mark': 'LSP',
+  \   'forceCompletionPattern': '\.|:|->|"\w+/*'
+  \ },
+  \ 'necovim': {'mark': 'vim'}
+  \})
+call ddc#custom#patch_global('ui', 'pum')
+call ddc#enable()
+'''

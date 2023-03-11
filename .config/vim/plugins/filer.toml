@@ -1,0 +1,78 @@
+[[plugins]]
+repo = 'lambdalisue/fern.vim'
+on_event = ['VimEnter']
+hook_source = '''
+let g:fern#default_hidden = 1
+let ignore_dirs  = '^\%(\.git\|node_modules\)$'
+let ignore_files = '\%(\.DS_Store\|\.terraform.lock.hcl\)\+'
+let g:fern#default_exclude = ignore_dirs . '\|' . ignore_files
+
+augroup InitFern
+  autocmd! *
+  autocmd FileType fern call s:init_fern()
+  autocmd WinEnter fern Fern ./ -reveal=% -drawer -toggle -width=40
+augroup END
+
+function! s:init_fern() abort
+  nmap <buffer><expr>
+      \ <Plug>(fern-my-expand-or-collapse)
+      \ fern#smart#leaf(
+      \   "\<Plug>(fern-action-open:select)",
+      \   "\<Plug>(fern-action-expand)",
+      \   "\<Plug>(fern-action-collapse)",
+      \ )
+
+  nmap <buffer> I <Plug>(fern-action-hidden:toggle)
+  nmap <buffer> c <Plug><NOP>
+  nmap <buffer> cd <Plug>(fern-action-tcd:cursor)
+  nmap <buffer> r <Plug>(fern-action-reload)
+  nmap <buffer><nowait> <CR> <Plug>(fern-my-expand-or-collapse)
+  nmap <buffer> h <Plug><NOP>
+  nmap <buffer> l <Plug><NOP>
+  nmap <buffer> cp <Plug>(fern-action-cp)
+  nmap <buffer> v <Plug>(fern-action-open:vsplit)
+  nmap <buffer> t <Plug>(fern-action-open:tabedit)
+endfunction
+'''
+
+[[plugins]]
+repo = 'lambdalisue/fern-git-status.vim'
+on_source = ['fern.vim']
+
+[[plugins]]
+depends = ['nerdfont.vim']
+repo = 'lambdalisue/fern-renderer-nerdfont.vim'
+on_source = ['fern.vim']
+hook_source = '''
+let g:fern#renderer = "nerdfont"
+'''
+
+[[plugins]]
+repo = 'lambdalisue/glyph-palette.vim'
+on_source = ['fern.vim']
+depends = ['fern-renderer-nerdfont.vim']
+hook_source = '''
+augroup ConfigureGlyphPalette
+  autocmd! *
+  autocmd FileType fern call glyph_palette#apply()
+augroup END
+'''
+
+[[plugins]]
+repo = 'yuki-yano/fern-preview.vim'
+on_source = ['fern.vim']
+hook_source = '''
+function! s:fern_settings() abort
+  nmap <silent> <buffer> p     <Plug>(fern-action-preview:toggle)
+  nmap <silent> <buffer> <C-p> <Plug>(fern-action-preview:auto:toggle)
+  nmap <silent> <buffer> <C-d> <Plug>(fern-action-preview:scroll:down:half)
+  nmap <silent> <buffer> <C-u> <Plug>(fern-action-preview:scroll:up:half)
+  nmap <silent> <buffer> <expr> <Plug>(fern-quit-or-close-preview) fern_preview#smart_preview("\<Plug>(fern-action-preview:close)", ":q\<CR>")
+  nmap <silent> <buffer> q <Plug>(fern-quit-or-close-preview)
+endfunction
+
+augroup ConfigureFern
+  autocmd!
+  autocmd FileType fern call s:fern_settings()
+augroup END
+'''

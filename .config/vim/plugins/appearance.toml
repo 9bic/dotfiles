@@ -1,0 +1,145 @@
+# font
+[[plugins]]
+repo = 'lambdalisue/nerdfont.vim'
+on_event = ['VimEnter']
+
+
+# coloscheme
+[[plugins]]
+repo = 'tomasr/molokai'
+on_event = ['VimEnter']
+
+[[plugins]]
+repo = 'w0ng/vim-hybrid'
+on_event = ['VimEnter']
+
+[[plugins]]
+repo = 'joshdick/onedark.vim'
+on_event = ['VimEnter']
+hook_source = '''
+augroup ChangeColorschemeOnStartup
+  autocmd! *
+  autocmd VimEnter * nested colorscheme onedark
+augroup END 
+'''
+
+[[plugins]]
+repo = 'aereal/vim-colors-japanesque'
+on_event = ['VimEnter']
+
+# switch syntax highlight under cursor
+[[plugins]]
+repo = 'osyo-manga/vim-precious'
+on_event = ['VimEnter']
+hook_source = '''
+" disable on insert mode
+let g:precious_enable_switch_CursorMoved_i = {
+\	"*" : 0
+\}
+'''
+
+# highlight word under cursor 
+[[plugins]]
+repo = 'osyo-manga/vim-brightest'
+on_event = ['InsertEnter']
+
+# bottom statusbar
+[[plugins]]
+repo = 'itchyny/lightline.vim'
+on_event = ['VimEnter']
+hook_source = '''
+let g:lightline = {
+      \ 'colorscheme': 'default',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],[ 'fugitive' ], ['bufnum', 'modified'], [ 'filename', 'method' ] ],
+      \   'right': [ ['linter_warnings', 'linter_errors', 'lineinfo' ], ['percent'], ['currentdir', 'fileformat', 'fileencoding', 'filetype' ] ]
+      \ },
+      \ 'component_function': {
+      \   'filename': 'MyFilename',
+      \   'fileformat': 'MyFileformat',
+      \   'filetype': 'MyFiletype',
+      \   'fileencoding': 'MyFileencoding',
+      \   'mode': 'MyMode',
+      \   'percent' : 'MyPercent',
+      \   'modified': 'MyModified',
+      \   'lineinfo' : 'MyLineInfo',
+      \   'fugitive' : 'MyFugitive',
+      \   'method': 'NearestMethodOrFunction'
+      \ },
+      \ 'subseparator': { 'left': '', 'right': '' }
+      \ }
+
+let g:lightline.inactive = {
+      \ 'left': [ [ 'mode' ], ['bufname'], ['filename', 'method'] ],
+      \ 'right': [ [ 'fileformat', 'fileencoding', 'filetype' ], ['currentdir'] ] }
+
+function! MyModified()
+  if winwidth(0) < 70
+    return ''
+  endif
+  return &ft =~ 'help' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+endfunction
+
+function! MyReadonly()
+  return &ft !~? 'help' && &readonly ? 'ReadOnly' : ''
+endfunction
+
+function! MyFilename()
+  let fname = expand('%')
+  return fname =~ 'Tag_List' ? 'TagList' :
+      \ &ft == 'fern' ? 'Fern' :
+      \ &ft == 'vista' ? 'Vista' :
+      \ &ft == 'vista_kind' ? 'Vista' :
+      \ ('' != MyReadonly() ? MyReadonly() . ' ' : '') .
+      \ ('' != fname ? fname : '[No Name]')
+endfunction
+function! MyCurrentDir()
+  return winwidth(0) > 70 ? '('.getcwd().')' : ''
+endfunction
+function! MyFileformat()
+  return winwidth(0) > 70 ? &fileformat : ''
+endfunction
+
+function! MyFiletype()
+  return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype : "No FileType") : ''
+endfunction
+
+function! MyFileencoding()
+  return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
+endfunction
+
+function! MyPercent()
+  return winwidth(0) > 70 ? printf('%3d%%', 100 * line('.') / line('$')) : ''
+endfunction
+
+function! MyLineInfo()
+  return winwidth(0) > 70 ? printf('%d:%d', line("."), col(".")) : ''
+endfunction
+function! MyMode()
+  let fname = expand('%:t')
+  return &ft == 'ddu-ff' ? 'Ddu' :
+        \ &ft == 'vista' ? 'Vista' :
+        \ &ft == 'vista_kind' ? 'Vista' :
+        \ winwidth(0) > 60 ? lightline#mode() : ''
+endfunction
+
+function! MyFugitive()
+  return exists('*FugitiveHead') ? ''.FugitiveHead() : ''
+endfunction
+
+function! NearestMethodOrFunction() abort
+  let method = get(b:, 'vista_nearest_method_or_function', '') 
+  return method != '' ? ''.method : ''
+endfunction
+
+let g:tagbar_status_func = 'TagbarStatusFunc'
+
+function! TagbarStatusFunc(current, sort, fname, ...) abort
+    let g:lightline.fname = a:fname
+  return lightline#statusline(0)
+endfunction
+
+command! -bar LightlineUpdate    call lightline#init()|
+  \ call lightline#colorscheme()|
+  \ call lightline#update()
+'''

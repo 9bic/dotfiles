@@ -9,6 +9,7 @@ endif
 " package manager
 if filereadable($RC_DIR.'/plugin.vim')
   source $RC_DIR/plugin.vim
+  source $RC_DIR/plugins/mapping.vim
 endif
 
 syntax on
